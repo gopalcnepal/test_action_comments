@@ -16,3 +16,11 @@ jobs:
 
       - name: Run tests
         run: python -c "import nonexistent_module"
+
+      - name: Explain failure (Gemini)
+        if: failure()
+        uses: gopalcnepal/ai-ci-error-explainer@v1
+        with:
+          api_key: ${{ secrets.GEMINI_API_KEY }}
+          provider: gemini
+          model: gemini-3-flash-preview

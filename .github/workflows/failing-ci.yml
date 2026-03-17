@@ -20,7 +20,10 @@ jobs:
 
       - name: Run tests
         run: python -c "import nonexistent_module"
-
+  explain_failure:
+    if: failure()
+    runs-on: ubuntu-latest
+    steps:
       - name: Explain failure (Gemini)
         if: failure()
         uses: gopalcnepal/explain-ci@v1.0.1

@@ -22,7 +22,7 @@ jobs:
 
       - name: Explain failure (Gemini)
         if: failure()
-        uses: gopalcnepal/explain-ci@v1.0
+        uses: gopalcnepal/explain-ci@v1.0.1
         with:
           api_key: ${{ secrets.GEMINI_API_KEY }}
           provider: gemini

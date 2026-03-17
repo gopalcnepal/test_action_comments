@@ -27,8 +27,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Explain failure (Gemini)
+        id: explain
         uses: gopalcnepal/explain-ci@v1.0.1
         with:
           api_key: ${{ secrets.GEMINI_API_KEY }}
           provider: gemini
           model: gemini-3-flash-preview
+      - name: Log explanation outcome
+        if: always()
+        run: |
+          echo "Explanation: ${{ steps.explain.outputs.explanation_markdown }}"
+          echo "Posted to: ${{ steps.explain.outputs.comment_target }}"
+          echo "PR Number: ${{ steps.explain.outputs.pr_number }}"

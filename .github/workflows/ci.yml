@@ -1,0 +1,47 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  actions: read
+  contents: write
+  pull-requests: write
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install pytest
+
+      - name: Run tests
+        run: pytest -v
+
+  explain-failure:
+    needs: [test]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Explain CI failure
+        id: explain
+        uses: gopalcnepal/explain-ci@v1
+        with:
+          api_key: ${{ secrets.GEMINI_API_KEY }}
+          provider: gemini
+          model: gemini-3-flash-preview
+
+      - name: Log explanation outcome
+        if: always()
+        run: |
+          echo "Posted to: ${{ steps.explain.outputs.comment_target }}"
+          echo "Comment posted: ${{ steps.explain.outputs.comment_posted }}"
